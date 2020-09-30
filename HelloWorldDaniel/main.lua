@@ -15,7 +15,7 @@ print ("Hello Patrick!")
 display.setStatusBar(display.HiddenStatusBar)
 
 --sets the background colour
-display.setDefault("background", 218/255, 165/255, 32/255)
+display.setDefault("background", 65/255, 105/255, 225/255)
 
 -- create a local variable
 local textObject
