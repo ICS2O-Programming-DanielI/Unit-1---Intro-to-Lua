@@ -59,8 +59,6 @@ areaTextRectangle = display.newText("The area of this rectangle with a width of 
 areaTextCircle = display.newText("The area of this circle with a radius of \n" ..
 	radius .. " is " .. areaOfCircle .. " pixels². ", 0, 0, Arial, textSize)
 
-
-
 --anchor the text and set its (x,y) position
 areaTextRectangle.anchorX = 0
 areaTextRectangle.anchorY = 0
