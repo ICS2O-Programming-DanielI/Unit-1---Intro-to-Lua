@@ -15,6 +15,7 @@ display.setDefault("background", 250/255, 128/255, 114/255)
 -----------------------------------------------------------------------------------------
 
 -- create local variables
+local points = 0
 local questionObject
 local correctObject
 local numericField 
@@ -69,6 +70,12 @@ local function NumericFieldListener( event )
 			correctObject.isVisible = true
 			timer.performWithDelay(800, HideCorrect)
 			event.target.text = "" 
+			
+			-- give a point if user gets the correct answer
+			points = points + 1
+
+			-- update it in the display object
+			pointsText.text = "Points = " .. points
 
 		else
 			incorrectObject.isVisible = true
@@ -82,6 +89,9 @@ end
 ----------------------------------------------------------------------------------------
 -- OBJECT CREATION
 ----------------------------------------------------------------------------------------
+
+-- display the amount of the points as a text object
+pointsText = display.newText("Points = " .. points, display.contentWidth/3, nil, 50)
 
 -- displays a question and sets the colour
 questionObject = display.newText( "", display.contentWidth/3, display.contentHeight/2, nil, 70 )
