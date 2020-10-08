@@ -9,6 +9,9 @@ display.setDefault ("background", 0/255, 255/255, 255/255)
 --hide status bar
 display.setStatusBar(display.HiddenStatusBar)
 
+local correctanswersound = audio.loadStream( "Sounds/Correct Answer Sound Effect.mp3" )
+local correctanswersoundeffect
+
 -- create blue button, set its position and make it visible
 local blueButton = display.newImageRect("Images/Fast Button Inactive@2x.png",198, 96)
 blueButton.x = display.contentWidth/2
@@ -22,9 +25,9 @@ redButton.y = display.contentHeight/2
 redButton.isVisible = false
 
 -- create checkmark, set its position and make it invisable
-local checkmark = display.newImageRect("Images/checkmark.png",175, 70)
-checkmark.x = display.contentWidth/1
-checkmark.y = dispaly.contentHeight/1
+local checkmark = display.newImageRect("Images/checkmark.png",210, 140)
+checkmark.x = display.contentWidth/2
+checkmark.y = display.contentHeight/2
 checkmark.isVisible = false
 
 -- create text object, set its position and make it invisible
@@ -33,6 +36,8 @@ textObject.x = display.contentWidth/2
 textObject.y = display.contentHeight/3
 textObject:setTextColor (0.8, 0, 0.4)
 textObject.isVisible = false
+
+
 
 -- Function: BlueButtonListener
 -- Input: touch listener
@@ -44,13 +49,16 @@ local function BlueButtonListener(touch)
 		blueButton.isVisible = false
 		redButton.isVisible = true
 		textObject.isVisible = true
-		checkmark.isVisible = 
+		checkmark.isVisible = true
+		-- Play the laser on any available channel
+		correctanswersoundeffect = audio.play(correctanswersound)
 	end
 
 	if (touch.phase == "ended") then
 		blueButton.isVisible = true
 		redButton.isVisible = false
 		textObject.isVisible = false
+		checkmark.isVisible = false
 	end
 end
 
@@ -59,12 +67,15 @@ local function RedButtonListener(touch)
 		blueButton.isVisible = true
 		redButton.isVisible = false
 		textObject.isVisible = true
+		checkmark.isVisible = false
 	end
 
 	if (touch.phase == "ended") then
-		blueButton.isVisible = false
-		redButton.isVisible = true
+		blueButton.isVisible = true
+		redButton.isVisible = false
 		textObject.isVisible = false
+		checkmark.isVisible = false
+		
 	end
 end
 
