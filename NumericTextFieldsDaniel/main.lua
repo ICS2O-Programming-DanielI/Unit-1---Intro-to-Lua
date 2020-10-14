@@ -67,6 +67,12 @@ local function NumericFieldListener( event )
 
 		-- if the users answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
+			-- give a point if user gets the correct answer 
+			points = points + 1
+
+			-- update it in the display object
+			pointsText.text = "Points = " .. points
+
 			correctObject.isVisible = true
 			timer.performWithDelay(800, HideCorrect)
 			event.target.text = "" 
@@ -80,6 +86,8 @@ local function NumericFieldListener( event )
 	end     
 end
 
+local function endGame()
+	
 ----------------------------------------------------------------------------------------
 -- OBJECT CREATION
 ----------------------------------------------------------------------------------------
@@ -98,8 +106,11 @@ incorrectObject = display.newText( "Incorrect!", display.contentWidth/2, display
 incorrectObject:setTextColor(255/255, 0/255, 0/255)
 incorrectObject.isVisible = false
 
+-- display the amount of points as a text object 
+pointsText = display.newText("Points = " .. points, display.contentWidth*2/3, display.contentHeight/10, nil, 50)
+
 -- Create numeric field
-numericField = native.newTextField( display.contentWidth*2/3, display.contentHeight/4, 400, 90 )
+numericField = native.newTextField( display.contentWidth*2/3, display.contentHeight/2, 400, 90 )
 numericField.inputType = "number"
 
 -- add the event listener for the numeric field
