@@ -10,6 +10,10 @@ display.setStatusBar(display.HiddenStatusBar)
 -- sets the background colour
 display.setDefault("background", 221/255, 160/255, 221/255)
 
+----------------------------------------------------------------------------------------------
+-- LOCAL VARIABLES 
+----------------------------------------------------------------------------------------------
+
 -- create local variables
 local points = 0
 local pointsText
@@ -19,20 +23,46 @@ local numWrongText
 
 local gameOver
 local youWin
+
 local randomNumber1
 local randomNumber2
 local randomOperator
+
 local correctAnswer
+local userAnswer
+
 local questionObject
 local AskQuestion
 local questionObject
 local correctObject
+
 local numericField 
-local userAnswer
+
 local incorrectObject
 local incorrectanswer
+
 local clear
 local mathRound
+
+-----------------------------------------------------------------------------------------
+-- SOUNDS
+-----------------------------------------------------------------------------------------
+
+-- Chaching sound 
+local chachingSound = audio.loadSound( "Sounds/Chaching.mp3" ) 
+local chachingSoundChannel
+
+-- wrong sound 
+local wrongSound = audio.loadSound( "Sounds/wrongSound.mp3" )
+local wrongSoundChannel
+
+-- whack sound
+local whackSound = audio.loadSound( "Sounds/Whack.mp3" )
+local whackSoundChannel
+
+--collect coin sound
+local collectcoinSound = audio.loadSound( "Sounds/collectcoin.wav" ) 
+local collectcoinSoundChannel
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -116,14 +146,23 @@ local function NumericFieldListener( event )
 			-- give a point if the user gets the correct answer
 			points = points + 1
 
+			collectcoinSoundChannel = audio.play(collectcoinSound)
+
+			timer.performWithDelay(2000, HideCollectCoin)
+
 			-- update it in the display object
 			pointsText.text = "Points = " .. points
 			correctObject.isVisible = true
-			timer.performWithDelay(800, HideCorrect)
+			timer.performWithDelay(500, HideCorrect)
 			event.target.text = ""
 
 			-- if user gets 5 points display you win 
-			if (points == 5) then 
+			if (points == 5) then
+
+				chachingSoundChannel = audio.play(chachingSound)
+
+				timer.performWithDelay(2000, HideChaching)
+
 				youWin.isVisible = true
 				questionObject.isVisible = false
 				numericField.isVisible = false
@@ -133,6 +172,10 @@ local function NumericFieldListener( event )
 		else
 			numWrong = numWrong + 1
 
+			wrongSoundChannel = audio.play(wrongSound)
+
+			timer.performWithDelay(2000, HideWrongsound)
+
 			numWrongText.text = "Number Incorrect " .. numWrong
 			incorrectObject.text = "Incorrect! The correct anwser is : " .. correctAnswer
 			incorrectObject.isVisible = true			
@@ -140,7 +183,12 @@ local function NumericFieldListener( event )
 			event.target.text = ""
 
 			-- if user gets 3 incorrect display game over 
-			if (numWrong == 3) then 			
+			if (numWrong == 3) then
+ 				
+ 				whackSoundChannel = audio.play(whackSound)
+
+ 				timer.performWithDelay(2000, HideWhack)
+
 				gameOver.isVisible = true
 				questionObject.isVisible = false
 				numericField.isVisible = false
