@@ -8,11 +8,15 @@
 display.setStatusBar(display.HiddenStatusBar)
 
 -- sets the background colour
-display.setDefault("background", 75/255, 0/255, 205/255)
+display.setDefault("background", 221/255, 160/255, 221/255)
 
 -- create local variables
 local points = 0
 local pointsText
+
+local numWrong = 0
+local numWrongText
+
 local gameOver
 local youWin
 local randomNumber1
@@ -112,22 +116,37 @@ local function NumericFieldListener( event )
 			-- give a point if the user gets the correct answer
 			points = points + 1
 
-			-- if user gets 5 points display you win 
-			points = 5 
-			youWin.isVisible = true
-
 			-- update it in the display object
 			pointsText.text = "Points = " .. points
 			correctObject.isVisible = true
 			timer.performWithDelay(800, HideCorrect)
 			event.target.text = ""
 
+			-- if user gets 5 points display you win 
+			if (points == 5) then 
+				youWin.isVisible = true
+				questionObject.isVisible = false
+				numericField.isVisible = false
+				pointsText.isVisible = false
+				numWrongText.isVisible = false
+			end 
 		else
+			numWrong = numWrong + 1
+
+			numWrongText.text = "Number Incorrect " .. numWrong
 			incorrectObject.text = "Incorrect! The correct anwser is : " .. correctAnswer
 			incorrectObject.isVisible = true			
 			timer.performWithDelay(1000, HideIncorrect)
-			event.target.text = "" 
+			event.target.text = ""
 
+			-- if user gets 3 incorrect display game over 
+			if (numWrong == 3) then 			
+				gameOver.isVisible = true
+				questionObject.isVisible = false
+				numericField.isVisible = false
+				pointsText.isVisible = false
+				numWrongText.isVisible = false
+			end 
 		end
 	end     
 end
@@ -138,15 +157,19 @@ end
 ----------------------------------------------------------------------------------------
 
 -- display the amount of points as a text object
-pointsText = display.newText("Points = " .. points, display.contentWidth/1.5, display.contentHeight/6, nil, 50)
+pointsText = display.newText("Points = " .. points, display.contentWidth/1.5, display.contentHeight/13, nil, 50)
+
+-- display the amount of points as a text object
+numWrongText = display.newText("Number Incorrect = " .. numWrong, display.contentWidth/1.5, display.contentHeight/6, nil, 50)
+
 
 -- display you win or game over 
-local youWin = display.newImageRect("Images/Youwin.png",210, 140)
+youWin = display.newImageRect("Images/Youwin.png",570, 570)
 youWin.x = display.contentWidth/2
 youWin.y = display.contentHeight/2
 youWin.isVisible = false
 
-local gameOver = display.newImageRect("Images/Gameover.png",210, 140)
+gameOver = display.newImageRect("Images/Gameover.png",570, 570)
 gameOver.x = display.contentWidth/2
 gameOver.y = display.contentHeight/2
 gameOver.isVisible = false
