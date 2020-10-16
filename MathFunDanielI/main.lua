@@ -17,19 +17,23 @@ local userAnswer
 local incorrectObject
 local incorrectanswer
 local clear
+local mathRound
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
 local function AskQuestion()
-	-- generate a random number between 1 and 2
+	-- generate a random number between 1 and 4
 	-- *** MAKE SURE TO DECLARE THIS VARIABLE ABOVE
 	randomOperator = math.random(1,4)
 
 	-- generate 2 random numbers
 	randomNumber1 = math.random(0, 4)
 	randomNumber2 = math.random(0, 4)
+
+	-- add number to round by
+	mathRound = math.round(0.1)
 
 	-- if the random operator is 1, then do addition
 	if (randomOperator == 1) then
@@ -51,7 +55,8 @@ local function AskQuestion()
 	-- otherwise, if the random operator is 3, do divison
 	elseif (randomOperator == 3) then
 		-- calculate the correct answer
-		correctAnswer = math.round( 0.1 ) randomNumber1 / randomNumber2 )
+		correctAnswer = randomNumber1 / randomNumber2 
+		correctAnswer = math.round( randomNumber1 / randomNumber2 )
 
 		-- create question in text object
 		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
@@ -59,7 +64,8 @@ local function AskQuestion()
 	-- otherwise, if the random operator is 4, do multiplication
 	elseif (randomOperator == 4) then
 		-- calculate correct answer
-		correctAnswer = math.round( 0.1 ) randomNumber1 * randomNumber2 ) 
+		correctAnswer = randomNumber1 * randomNumber2 
+		correctAnswer = math.round( randomNumber1 * randomNumber2 )
 
 		-- create question in text object
 		questionObject.text = randomNumber1 .. " * " .. randomNumber2 .. " = "
