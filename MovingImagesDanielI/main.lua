@@ -19,6 +19,13 @@ local beetleship = display.newImageRect("Images/beetleship.png", 200, 200)
 
 local octopus = display.newImageRect("Images/octopus.png", 300, 200)
 
+-- background sound
+local musicSound = audio.play( "Sounds/Music.mp3" )
+local musicSoundChannel
+local musicSoundChannel = audio.play( musicSound )
+
+timer.performWithDelay(2000, HideMusic)
+
 -- set the image to be transparent
 beetleship.alpha = 1
 
@@ -44,6 +51,7 @@ local function MoveShip(event)
 	beetleship.alpha = beetleship.alpha - 0.001
 	-- Scale the image by 200% (x) and 50% (y)
 	beetleship:scale( 1.002, 1.002 )
+
 end
 
 local function MoveShip2(event)
@@ -51,7 +59,6 @@ local function MoveShip2(event)
 	octopus.x = octopus.x - scrollSpeed2
 	-- change the transparency of the ship every time it moves so that it fades out
 	octopus.alpha = octopus.alpha + 0.01
-	
 end
 
 -- MoveShip will be called over and over again
