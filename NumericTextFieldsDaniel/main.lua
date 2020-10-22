@@ -106,7 +106,18 @@ local function UpdateTime()
 		elseif (lives == 1) then
 			heart1.isVisible = false
 		elseif (lives == 0) then
-			timer.cancel(StartTimer)
+			timer.cancel(countDownTimer)
+
+			whackSoundChannel = audio.play(whackSound)
+
+ 			timer.performWithDelay(2000, HideWhack)
+ 
+			gameOver.isVisible = true
+			questionObject.isVisible = false
+			numericField.isVisible = false
+			pointsText.isVisible = false
+			numWrongText.isVisible = false
+			clockText.isVisible = false
 		end 
 
 	end
@@ -323,3 +334,4 @@ AskQuestion()
 
 -- call the function to start the timer
 StartTimer()
+ 
