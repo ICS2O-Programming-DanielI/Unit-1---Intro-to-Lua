@@ -1,4 +1,4 @@
--- Title: WhackAMole
+-- Title: WhackAeagle
 -- Name: Daniel Imperadeiro
 -- Course: ICS2O/3C
 -- This program places a random object on the screen. If the user clicks on it in time,
@@ -7,13 +7,20 @@
 -- hide the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
---set points
-local points = 0
+-- Sounds
+local danceSound = audio.loadSound( "Sounds/danceSound.mp3" )
+local danceSoundChannel
+
+danceSoundChannel = audio.play(danceSound)
+
+local explosionSound = audio.loadSound( "Sounds/explosionSound.mp3" )
+local explosionSoundChannel
+
 
 --Creating Background 
 local bkg = display.newRect( 0, 0, display.contentWidth, display.contentHeight )
 
-	display.setDefault("background", 124/255, 249/255, 199/255)
+	bkg:setFillColor( .48, .97, .78)
 
 	--Setting Position
 	bkg.anchorX = 0
@@ -21,51 +28,61 @@ local bkg = display.newRect( 0, 0, display.contentWidth, display.contentHeight )
 	bkg.x = 0
 	bkg.y = 0
 
---Creating Mole
-local mole = display.newImage( "Images/mole.png" , 0, 0 )
+--Creating Eagle
+local eagle = display.newImage( "Images/eagle.png" , 0, 0 )
 
 	--Setting Position
-	mole.x = display.contentCenterX
-	mole.y = display.contentCenterY
+	eagle.x = display.contentCenterX
+	eagle.y = display.contentCenterY
 
-	-- Scale the image by 200% (X) and 50% (Y)
-	mole:scale(.5,.5)
+	-- Scale the image 
+	eagle:scale(.75,.75)
 
-	-- set the mole to be transparent
-	mole.alpha = 0
+	-- make the eagle invisible 
+	eagle.isVisible = false
+ 
+--set score
+local points = 0
 
-
-
-
-
-
+-- display the amount of points as a text object
+pointsText = display.newText("Points = " .. points, display.contentWidth/6, display.contentHeight/1.1, nil, 59)
+pointsText:setTextColor(0, 0, .501)
 
 --------------------------------Functions----------------------------------------
 
--- This function that makes mole appear in a random (x,y) position on the screen
+-- This function that makes eagle appear in a random (x,y) position on the screen
 -- before calling the Hide function
 function PopUp( )
 	
 	---Choosing Random Position on the screen between 0 and the size of the screen
-	mole.x = math.random( 0, display.contentWidth )
-	mole.y = math.random( 0, display.contentHeight )
+	eagle.x = math.random( 0, display.contentWidth )
+	eagle.y = math.random( 0, display.contentHeight )
 
-	mole.alpha = 1
+	-- make the eagle visible
+	eagle.isVisible = true
 
-	timer.performWithDelay(2000, Hide)
+	timer.performWithDelay(590, Hide)
 end
 
 --This function calls the PopUp function after 3 seconds
 function PopUpDelay( )
-	timer.performWithDelay( 3000, PopUp )
+	timer.performWithDelay( 1000, PopUp )
 end 
 
--- This function makes the mole invisible and then calls the PopUpDelay function
+-- This function makes the eagle invisible and then calls the PopUpDelay function
 function Hide( )
 	
 	--Changing Visibility
-	mole.isVisible = false
+	eagle.isVisible = false
 	
+	-- call PopUpDelay function
+	PopUpDelay()
+
+end
+
+-- This function starts the game
+function GameStart( )
+	PopUpDelay()
 end
 
 --This function starts the game
@@ -76,6 +93,11 @@ function Whacked( event )
 		-- give a point to the user
 		points = points + 1
 
+		-- play a explosion sound when eagle is hit
+		explosionSoundChannel = audio.play(explosionSound)
+
+		timer.performWithDelay(2000, HideExplosion)
+
 		-- update it in the display object
 		pointsText.text = "Points = " .. points
 	end
@@ -83,8 +105,10 @@ function Whacked( event )
 end
 
 -----------------------------------Event Listeners-------------------------------------
--- I add the event listener to the moles so that if the mole is touched, the Whacked function
+-- I add the event listener to the eagles so that if the eagle is touched, the Whacked function
 -- is called
-mole:addEventListener( "touch", Whacked )
-------------------------------------- Start 
-PopUp()
+eagle:addEventListener( "touch", Whacked )
+
+------------------------------------- Start the Game -----------------------------------
+
+GameStart()
